@@ -1,0 +1,433 @@
+html {background-color: #1d1a18}
+.booksDropdown{
+    display: inline-block;
+    color: black;
+    font-size: 75%;
+    width: 15vw;
+    margin-left: 10%;
+}
+
+.chapterDropdown{
+    display: inline-block;
+    color: black;
+    font-size: 75%;
+    width: 8vw;
+    margin-left: 10%;
+}
+
+.dropDownSameLine{
+    display: inline-block;
+    margin-left: 5%;
+    z-index: 10;
+    font-family:serif;
+}
+.dropDownSameLine1{
+    display: inline-block;
+    margin-left: 5%;
+    z-index: 10;
+    font-family:serif;
+}
+.dropDownSameLine2{
+    display: inline-block;
+    margin-left: 5%;
+    z-index: 10;
+    font-family:serif;
+}
+
+.allDropDowns{
+    display: flex;
+}
+
+.submit{
+    margin-left: 1%;
+    margin-top: 1%;
+    z-index: 10;
+}
+
+.dailyVerse{
+    margin-left: 1%;
+    margin-top: 1%;
+    z-index: 10;
+}
+
+.flex{
+    display:inline-table;
+}
+
+.full{
+    height:100%;
+    width: 100%;
+}
+
+.book{
+    width:100%;
+}
+
+.correct{
+    color: rgb(1, 151, 1);
+}
+
+.red{
+    width: 100%;
+}   
+
+.chapter{
+    margin-left:40%;
+    width:100%;
+    position: relative;
+}
+
+.newTestament{
+    font-size: 50%;
+    margin-left: 1%;
+    z-index: 100;
+    margin-top: 1%;
+}
+
+.refresh{
+    margin-left: 1%;
+    margin-top: 1%;
+    z-index: 10;
+}
+
+.guess{
+    position:relative;
+    width:100%;
+    float:right;
+    height:45vh;
+    top: -20vh;
+}
+
+.guessDiv{
+    position: absolute;
+    top: 22vh;
+    left: 29%;
+    font-size: 3vh;
+    font-family: serif;
+}
+
+.guessDiv1{
+    position: absolute;
+    top: 22vh;
+    left: 32%;
+    font-family:serif;
+    font-size: 3vh;
+    vertical-align: text-top;
+}
+
+.textGuess1{
+    display: flex;
+}
+
+.iconGuess1{
+    display: flex;
+}
+
+.standardHeight{
+    height: 4vh;
+    display: flex;
+}
+
+.fullLine{
+    width: 3000%;
+    background-color: red;
+    margin-top: 70%;
+}
+
+.nonGuesses{
+    margin-top: -5%;
+}
+
+.realVerse{
+    color: black;
+    font-family: serif;
+    width: 70%;
+    margin-left: 15%;
+}
+
+.close{
+    color: black;
+    background-color: yellow;
+}
+
+.chapterDiv{
+    float: left;
+    position: absolute;
+    top: 22vh;
+    left: 50%;
+    font-family:serif;
+    font-size: 3vh;
+}
+
+.verseDiv{
+    position: absolute;
+    top: 22vh;
+    left: 62%;
+    font-family:serif;
+    font-size: 3vh;
+}
+.verse {
+    margin-left:300%;
+    width:100%;
+}
+
+.verseText{
+    color: rgb(0, 0, 0);
+    font-family:serif;
+    width: 70%;
+    margin-left: 15%;
+}
+
+.curStreak{
+    position: absolute;
+    margin-top: 2%;
+    font-family:serif;
+}
+
+.right{
+    position: absolute;
+    margin-top: 6%;
+    font-family:serif;
+    background-color: green;
+}
+
+.add{
+    transform: scale(0.8);
+}
+
+.wrong{
+    position: absolute;
+    margin-top: 10%;
+    font-family:serif;
+    background-color: rgb(193, 0, 0);
+}
+
+.sizedBreak{
+    height: 1.8vh;
+}
+/* 
+@keyframes example {
+    0%   {background-color:red; left:0px; top:0px;}
+    25%  {background-color:yellow; left:200px; top:0px;}
+    50%  {background-color:blue; left:200px; top:200px;}
+    75%  {background-color:green; left:0px; top:200px;}
+    100% {background-color:red; left:0px; top:0px;}
+  }
+
+.test {
+    width: 100px;
+    height: 100px;
+    background-color: red;
+    animation-name: example;
+    animation-duration: 4s;
+    position: absolute;
+} */
+
+/* @media only screen and (max-width: 450px) {
+
+    .guessDiv{
+        position: absolute;
+        top: 50vh;
+        left: 1%;
+    }
+
+    .chapterDiv{
+        float: left;
+        position: absolute;
+        top: 50vh;
+        left: 30%;
+        font-size: 75%;
+    }
+
+    .bookDiv{
+        position: fixed;
+        top: 50vh;
+        left: 8%;
+        font-size: 75%;
+    }
+
+    .verseDiv{
+        position: fixed;
+        top: 50vh;
+        left: 22%;
+        height: 125%;
+        font-size: 75%;
+    }
+
+} */
+
+@media only screen and (max-width: 850px) {
+    .chapterDropdown{
+        display: inline-block;
+        color: black;
+        font-size: 75%;
+        width: 20vw;
+        margin-left: 10%;
+        z-index: 11;
+        font-size: 50%;
+    }
+
+    .booksDropdown{
+        display: inline-block;
+        color: black;
+        font-size: 50%;
+        width: 30vw;
+        margin-left: -8%;
+    }
+
+    .submit{
+        margin-top: -2%;
+        height: 3%;
+        z-index: 10;
+        position: absolute;
+        left: 40%;
+    }
+
+    .fullLine{
+        width: 2000%;
+        background-color: red;
+        margin-top: 95%;
+    }
+
+    .fullLineTest{
+        width: 20%;
+        background-color: red;
+        margin-top: 59%;
+    }
+
+    .sizedBreak{
+        height: 1vh;
+    }
+
+    .chapterDiv{
+        position: absolute;
+        top: 25vh;
+        left: 50%;
+        margin-top: 2%;
+        height: 40px;
+        font-family:serif;
+        font-size: 2.5vh;
+    }
+
+    .allDropDowns{
+        display: flex;
+        margin-top: 5%;
+        height: 200%;
+    }
+
+    /* .bookDiv{
+        position: absolute;
+        top: 25vh;
+        left: 8%;
+        margin-top: 2%;
+        height: 40px;
+    } */
+
+    .book{
+        height: 3.5vh;
+    }
+
+    .standardHeight{
+        height: 4vh;
+    }
+
+
+    .verseDiv{
+        position: absolute;
+        top: 25vh;
+        left: 75%;
+        margin-top: 2%;
+        height: 40px;
+        font-family:serif;
+        font-size: 2.5vh;
+    }
+
+    .guessDiv{
+        position: absolute;
+        top: 25vh;
+        left: 1%;
+        margin-top: 2%;
+        height: 40px;
+        font-family:serif;
+        font-size: 2.5vh;
+
+    }
+
+    .guessDiv1{
+        position: absolute;
+        top: 25vh;
+        left: 8%;
+        margin-top: 2%;
+        height: 40px;
+        font-family:serif;
+        font-size: 2.5vh;
+    }
+
+    .newTestament{
+        font-size: 50%;
+        z-index: 10;
+        top: 0vh;
+        left: 18vh;
+        position: absolute;
+        left: 20%;
+    }
+    
+    .refresh{
+        top: 0vh;
+        left: 75%;
+        z-index: 10;
+        position: absolute;
+    }
+
+    .nonGuesses{
+        margin-top: 10%;
+    }
+
+    .dropDownSameLine{
+        display: inline-block;
+        margin-left: 5%;
+        margin-top: 5%;
+        z-index: 10;
+        font-family:serif;
+    }
+    .dropDownSameLine1{
+        display: inline-block;
+        margin-left: 5%;
+        margin-top: 5%;
+        z-index: 10;
+        font-family:serif;
+    }
+    .dropDownSameLine2{
+        display: inline-block;
+        margin-left: 5%;
+        margin-top: 5%;
+        z-index: 10;
+        font-family:serif;
+    }
+    .curStreak{
+        position: absolute;
+        margin-top: 5%;
+        margin-left: 5%;
+        font-family:serif;
+    }
+    
+    .right{
+        position: absolute;
+        margin-left: 45%;
+        margin-top: 5%;
+        font-family:serif;
+        background-color: green;
+    }
+
+    .hidden{
+        display: none;
+    }
+    
+    .wrong{
+        position: absolute;
+        margin-left: 75%;
+        margin-top: 5%;
+        font-family:serif;
+        background-color: rgb(193, 0, 0);
+    }
+}
