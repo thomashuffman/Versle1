@@ -397,63 +397,6 @@ class Main extends Component {
         // var bookOutput = varChapters.bookGuesses.map(item => <div> {item} </div>)
         return(
             <div className="full">
-                {/* <Stack   direction="row"
-                        divider={<Divider orientation="vertical" flexItem />}
-                        spacing={2}>
-                    {this.state.bookGuessesVal.map(item => <Paper className="book"> {item} </Paper>)}
-                    {this.state.chapterGuessesVal.map(item => <Paper className="book"> {item} </Paper>)}
-                    {this.state.verseGuessesVal.map(item => <Paper className = "book"> {item} </Paper>)}
-                </Stack> */}
-                {/* <div className="dropDownSameLine">
-                <div>
-                    {this.state.bookGuesses.map(item => <div> {item} </div>)}
-                </div>
-                <div>
-                    {this.state.chapterGuesses.map(item => <div> {item} </div>)}
-                </div>
-                <div>
-                    {this.state.verseGuesses.map(item => <div> {item} </div>)}
-                </div>
-                </div> */}
-                {/* { this.state.bookDir < 0 &&
-                <div>
-                    SELECTED BOOK IS TOO LOW
-                </div>
-                }{ this.state.bookDir === 0 &&
-                <div>
-                    SELECTED BOOK IS EQUAL
-                </div>
-                }{ this.state.bookDir > 0 &&
-                <div>
-                    SELECTED BOOK IS TOO HIGH
-                </div>
-                }
-                { this.state.chapterDir < 0 &&
-                <div>
-                    SELECTED CHAPTER IS TOO LOW
-                </div>
-                }{this.state.chapterDir === 0 &&
-                <div>
-                    SELECTED CHAPTER IS EQUAL
-                </div>
-                }{this.state.chapterDir > 0 &&
-                <div>
-                    SELECTED CHAPTER IS TOO HIGH
-                </div>
-                }
-                {this.state.verseDir < 0 &&
-                <div>
-                    SELECTED VERSE IS TOO LOW
-                </div>
-                }{this.state.verseDir === 0 &&
-                <div>
-                     SELECTED VERSE IS EQUAL
-                </div>
-                }{this.state.verseDir > 0 &&
-                <div>
-                    SELECTED VERSE IS TOO HIGH
-                </div>
-                } */}
                 <div className="nonGuesses"
                 style={{
                     backgroundImage: 'url('+blankScroll+')',

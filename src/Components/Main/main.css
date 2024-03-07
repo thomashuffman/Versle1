@@ -178,28 +178,48 @@ html {background-color: #1d1a18}
     margin-left: 15%;
 }
 
-.curStreak{
-    position: absolute;
-    margin-top: 2%;
-    font-family:serif;
+.curStreak, .right, .wrong {
+    background-color: #f0f0f0; /* Light gray background */
+    padding: 15px 20px; /* Increased padding for better readability */
+    border-radius: 10px; /* Rounded corners */
+    margin-bottom: 10px; /* Increased spacing between divs */
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3); /* Enhanced shadow effect */
+    width: 15%; /* Increased width for more presence */
+    position: absolute; /* Maintain absolute positioning */
+    top: 50%; /* Center vertically */
+    transform: translateY(-50%); /* Center vertically */
+    left: 20px; /* Offset from the left side of the screen */
+    animation: fadeIn 0.5s ease-in-out; /* Fade-in animation */
+    color: black;
 }
 
-.right{
-    position: absolute;
-    margin-top: 6%;
-    font-family:serif;
-    background-color: green;
+.right {
+    color: green; /* Blue text color */
+    top: calc(50% + 10px + 70px); /* Adjusted vertical position */
+    animation-delay: 0.2s; /* Delayed animation for better visual effect */
 }
+
+.wrong {
+    color: red; /* Orange text color */
+    top: calc(50% + 10px + 150px); /* Adjusted vertical position */
+    animation-delay: 0.4s; /* Delayed animation for better visual effect */
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-50%) scale(0.8); /* Initial scale-down effect */
+    }
+    to {
+        opacity: 1;
+        transform: translateY(-50%) scale(1); /* Final scale-up effect */
+    }
+}
+
+
 
 .add{
     transform: scale(0.8);
-}
-
-.wrong{
-    position: absolute;
-    margin-top: 10%;
-    font-family:serif;
-    background-color: rgb(193, 0, 0);
 }
 
 .sizedBreak{
