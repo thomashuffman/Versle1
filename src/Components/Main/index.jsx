@@ -117,6 +117,7 @@ class Main extends Component {
             wrong: 0,
             right: 0,
             correctAnswer: false,
+            dailyDateKey: "",
             dailyVerse: true
         };
       }
@@ -129,12 +130,30 @@ class Main extends Component {
             endlessStreak: savedEndlessStreak
         });
         this.loadDailyVerse();
+        this.dailyRolloverInterval = setInterval(() => this.checkDailyRollover(), 60000);
       }
 
+    componentWillUnmount(){
+        clearInterval(this.dailyRolloverInterval);
+    }
+
     getDateKey(date = new Date()){
-        const month = String(date.getMonth() + 1).padStart(2, "0");
-        const day = String(date.getDate()).padStart(2, "0");
-        return `${date.getFullYear()}-${month}-${day}`;
+        const easternDateParts = new Intl.DateTimeFormat("en-US", {
+            timeZone: "America/New_York",
+            year: "numeric",
+            month: "2-digit",
+            day: "2-digit"
+        }).formatToParts(date);
+        const getPart = (type) => easternDateParts.find(part => part.type === type).value;
+
+        return `${getPart("year")}-${getPart("month")}-${getPart("day")}`;
+    }
+
+    getPreviousDateKey(date = new Date()){
+        const todayKey = this.getDateKey(date);
+        const parts = todayKey.split("-").map(part => parseInt(part));
+        const previousEasternNoon = new Date(Date.UTC(parts[0], parts[1] - 1, parts[2] - 1, 12));
+        return this.getDateKey(previousEasternNoon);
     }
 
     hashString(value){
@@ -201,6 +220,16 @@ class Main extends Component {
         const todayKey = this.getDateKey();
         const ind = verseIndexes[this.hashString(todayKey) % verseIndexes.length];
         this.setVerse(words, ind);
+        this.setState({
+            dailyDateKey: todayKey
+        })
+    }
+
+    checkDailyRollover(){
+        const todayKey = this.getDateKey();
+        if(this.state.dailyVerse && this.state.dailyDateKey && this.state.dailyDateKey !== todayKey){
+            this.loadDailyVerse();
+        }
     }
 
     updateDailyStreak(){
@@ -210,9 +239,7 @@ class Main extends Component {
             return;
         }
 
-        const yesterday = new Date();
-        yesterday.setDate(yesterday.getDate() - 1);
-        const yesterdayKey = this.getDateKey(yesterday);
+        const yesterdayKey = this.getPreviousDateKey();
         const savedStreak = parseInt(localStorage.getItem("versleDailyStreak") || "0");
         const nextStreak = lastSolvedDate === yesterdayKey ? savedStreak + 1 : 1;
 
