@@ -1,453 +1,491 @@
-html {background-color: #1d1a18}
-.booksDropdown{
-    display: inline-block;
-    color: black;
-    font-size: 75%;
-    width: 15vw;
-    margin-left: 10%;
+html {
+  background: #14100d;
 }
 
-.chapterDropdown{
-    display: inline-block;
-    color: black;
-    font-size: 75%;
-    width: 8vw;
-    margin-left: 10%;
+.full {
+  min-height: 100vh;
+  width: 100%;
+  padding: 32px;
+  color: #f8efe1;
+  background:
+    radial-gradient(circle at 12% 4%, rgba(184, 135, 47, 0.2), transparent 32%),
+    linear-gradient(135deg, #17110f 0%, #2b2119 48%, #0f1514 100%);
+  box-sizing: border-box;
 }
 
-.dropDownSameLine{
-    display: inline-block;
-    margin-left: 5%;
-    z-index: 10;
-    font-family:serif;
-}
-.dropDownSameLine1{
-    display: inline-block;
-    margin-left: 5%;
-    z-index: 10;
-    font-family:serif;
-}
-.dropDownSameLine2{
-    display: inline-block;
-    margin-left: 5%;
-    z-index: 10;
-    font-family:serif;
+.heroPanel,
+.gameShell,
+.guessBoard {
+  width: 100%;
+  max-width: 1180px;
+  margin: 0 auto;
 }
 
-.allDropDowns{
-    display: flex;
+.heroPanel {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 28px;
 }
 
-.submit{
-    margin-left: 1%;
-    margin-top: 1%;
-    z-index: 10;
+.brandLockup {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  text-align: left;
 }
 
-.dailyVerse{
-    margin-left: 1%;
-    margin-top: 1%;
-    z-index: 10;
+.sealMark {
+  display: grid;
+  place-items: center;
+  width: 64px;
+  height: 64px;
+  color: #1d140f;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 2.4rem;
+  font-weight: 700;
+  background: linear-gradient(145deg, #f7d88d, #a86f23);
+  border: 1px solid rgba(255, 239, 190, 0.55);
+  border-radius: 50%;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.28), inset 0 2px 8px rgba(255, 255, 255, 0.35);
 }
 
-.flex{
-    display:inline-table;
+.eyebrow {
+  margin: 0 0 2px;
+  color: #d7b779;
+  font-size: 0.76rem;
+  font-weight: 800;
+  letter-spacing: 0;
+  text-transform: uppercase;
 }
 
-.full{
-    height:100%;
-    width: 100%;
+h1 {
+  margin: 0;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(2.2rem, 6vw, 4.6rem);
+  line-height: 0.95;
 }
 
-.book{
-    width:100%;
+.modeCluster {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  flex-wrap: wrap;
 }
 
-.correct{
-    color: rgb(1, 151, 1);
+.dailyVerse,
+.newTestament {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  padding: 8px 12px;
+  color: #f7ead4;
+  font-size: 0.86rem;
+  font-weight: 700;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(247, 216, 141, 0.22);
+  border-radius: 8px;
+  backdrop-filter: blur(18px);
+  box-sizing: border-box;
 }
 
-.red{
-    width: 100%;
-}   
-
-.chapter{
-    margin-left:40%;
-    width:100%;
-    position: relative;
+.newTestament input {
+  width: 18px;
+  height: 18px;
+  accent-color: #c99237;
 }
 
-.newTestament{
-    font-size: 50%;
-    margin-left: 1%;
-    z-index: 100;
-    margin-top: 1%;
+.iconButton,
+.submit {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 46px;
+  border: 0;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 160ms ease, box-shadow 160ms ease, opacity 160ms ease;
 }
 
-.refresh{
-    margin-left: 1%;
-    margin-top: 1%;
-    z-index: 10;
+.iconButton {
+  width: 46px;
+  color: #201711;
+  background: #e1b45d;
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.28);
 }
 
-.guess{
-    position:relative;
-    width:100%;
-    float:right;
-    height:45vh;
-    top: -20vh;
+.iconButton:hover,
+.submit:hover {
+  transform: translateY(-1px);
 }
 
-.guessDiv{
-    position: absolute;
-    top: 22vh;
-    left: 29%;
-    font-size: 3vh;
-    font-family: serif;
+.gameShell {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: 148px minmax(0, 1fr);
+  gap: 22px;
+  align-items: stretch;
 }
 
-.guessDiv1{
-    position: absolute;
-    top: 22vh;
-    left: 32%;
-    font-family:serif;
-    font-size: 3vh;
-    vertical-align: text-top;
+.scoreRail {
+  display: grid;
+  gap: 12px;
+  align-content: start;
+  min-width: 0;
 }
 
-.textGuess1{
-    display: flex;
+.scoreRail.dailyOnly {
+  grid-template-columns: 1fr;
 }
 
-.iconGuess1{
-    display: flex;
+.scoreCard {
+  padding: 18px 16px;
+  text-align: left;
+  background: rgba(14, 18, 17, 0.7);
+  border: 1px solid rgba(247, 216, 141, 0.18);
+  border-radius: 8px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
 }
 
-.standardHeight{
-    height: 4vh;
-    display: flex;
+.scoreCard span {
+  display: block;
+  color: #cbbba5;
+  font-size: 0.78rem;
+  font-weight: 800;
+  text-transform: uppercase;
 }
 
-.fullLine{
-    width: 3000%;
-    background-color: red;
-    margin-top: 70%;
+.scoreCard strong {
+  display: block;
+  margin-top: 6px;
+  color: #fff5e7;
+  font-size: 2rem;
+  line-height: 1;
 }
 
-.nonGuesses{
-    margin-top: -5%;
+.scoreCard.success strong {
+  color: #87d69b;
 }
 
-.realVerse{
-    color: black;
-    font-family: serif;
-    width: 70%;
-    margin-left: 15%;
+.scoreCard.miss strong {
+  color: #ed907f;
 }
 
-.close{
-    color: black;
-    background-color: yellow;
+.playSurface {
+  position: relative;
+  z-index: 4;
+  min-width: 0;
+  overflow: visible;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02)),
+    rgba(19, 17, 15, 0.82);
+  border: 1px solid rgba(247, 216, 141, 0.2);
+  border-radius: 8px;
+  box-shadow: 0 28px 80px rgba(0, 0, 0, 0.34);
 }
 
-.chapterDiv{
-    float: left;
-    position: absolute;
-    top: 22vh;
-    left: 50%;
-    font-family:serif;
-    font-size: 3vh;
+.verseCard {
+  position: relative;
+  min-height: 250px;
+  padding: clamp(28px, 5vw, 56px);
+  color: #2b1d12;
+  background:
+    linear-gradient(90deg, rgba(126, 81, 30, 0.1), transparent 16%, transparent 84%, rgba(126, 81, 30, 0.1)),
+    linear-gradient(180deg, #fff4dd, #ead7b4);
+  border-bottom: 1px solid rgba(86, 54, 23, 0.16);
+  box-sizing: border-box;
 }
 
-.verseDiv{
-    position: absolute;
-    top: 22vh;
-    left: 62%;
-    font-family:serif;
-    font-size: 3vh;
-}
-.verse {
-    margin-left:300%;
-    width:100%;
+.verseOrnament {
+  position: absolute;
+  inset: 18px;
+  pointer-events: none;
+  border: 1px solid rgba(145, 91, 33, 0.22);
+  border-radius: 8px;
 }
 
-.verseText{
-    color: rgb(0, 0, 0);
-    font-family:serif;
-    width: 70%;
-    margin-left: 15%;
+.verseOrnament::before,
+.verseOrnament::after {
+  position: absolute;
+  top: -11px;
+  width: 82px;
+  height: 20px;
+  content: "";
+  background: #ead7b4;
+  border-top: 1px solid rgba(145, 91, 33, 0.22);
+  border-bottom: 1px solid rgba(145, 91, 33, 0.22);
 }
 
-.curStreak, .right, .wrong {
-    background-color: #f0f0f0; /* Light gray background */
-    padding: 15px 20px; /* Increased padding for better readability */
-    border-radius: 10px; /* Rounded corners */
-    margin-bottom: 10px; /* Increased spacing between divs */
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3); /* Enhanced shadow effect */
-    width: 15%; /* Increased width for more presence */
-    position: absolute; /* Maintain absolute positioning */
-    top: 50%; /* Center vertically */
-    transform: translateY(-50%); /* Center vertically */
-    left: 20px; /* Offset from the left side of the screen */
-    animation: fadeIn 0.5s ease-in-out; /* Fade-in animation */
-    color: black;
+.verseOrnament::before {
+  left: 28px;
 }
 
-.right {
-    color: green; /* Blue text color */
-    top: calc(50% + 10px + 70px); /* Adjusted vertical position */
-    animation-delay: 0.2s; /* Delayed animation for better visual effect */
+.verseOrnament::after {
+  right: 28px;
 }
 
-.wrong {
-    color: red; /* Orange text color */
-    top: calc(50% + 10px + 150px); /* Adjusted vertical position */
-    animation-delay: 0.4s; /* Delayed animation for better visual effect */
+.verseText {
+  position: relative;
+  width: min(820px, 100%);
+  margin: 0 auto;
+  color: #2a1c12;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(1.22rem, 2vw, 1.72rem);
+  line-height: 1.58;
+  text-align: center;
 }
 
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(-50%) scale(0.8); /* Initial scale-down effect */
-    }
-    to {
-        opacity: 1;
-        transform: translateY(-50%) scale(1); /* Final scale-up effect */
-    }
+.realVerse {
+  position: relative;
+  display: inline-flex;
+  margin-bottom: 18px;
+  padding: 8px 12px;
+  color: #3d2615;
+  font-size: 0.86rem;
+  font-weight: 800;
+  background: rgba(184, 135, 47, 0.18);
+  border: 1px solid rgba(119, 77, 31, 0.22);
+  border-radius: 8px;
 }
 
-
-
-.add{
-    transform: scale(0.8);
+.guessControls {
+  display: grid;
+  grid-template-columns: minmax(220px, 1.5fr) minmax(150px, 0.75fr) minmax(150px, 0.75fr) auto;
+  gap: 14px;
+  align-items: end;
+  padding: 20px;
 }
 
-.sizedBreak{
-    height: 1.8vh;
+.selectGroup {
+  min-width: 0;
+  text-align: left;
 }
-/* 
-@keyframes example {
-    0%   {background-color:red; left:0px; top:0px;}
-    25%  {background-color:yellow; left:200px; top:0px;}
-    50%  {background-color:blue; left:200px; top:200px;}
-    75%  {background-color:green; left:0px; top:200px;}
-    100% {background-color:red; left:0px; top:0px;}
+
+.selectGroup > span {
+  display: block;
+  margin-bottom: 8px;
+  color: #d6c6af;
+  font-size: 0.78rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.booksDropdown,
+.chapterDropdown {
+  color: #1d1712;
+  font-size: 0.95rem;
+}
+
+.verseSelect__control {
+  min-height: 46px !important;
+  background: #fff8ed !important;
+  border-color: rgba(226, 180, 93, 0.46) !important;
+  border-radius: 8px !important;
+  box-shadow: none !important;
+}
+
+.verseSelect__control:hover {
+  border-color: #e1b45d !important;
+}
+
+.verseSelect__menu {
+  z-index: 1000 !important;
+  color: #241810;
+  text-align: left;
+}
+
+.submit {
+  padding: 0 22px;
+  color: #1d140f;
+  font-weight: 900;
+  background: linear-gradient(145deg, #f6d37d, #b97c2a);
+  box-shadow: 0 16px 34px rgba(0, 0, 0, 0.3);
+}
+
+.submit:disabled {
+  cursor: not-allowed;
+  opacity: 0.52;
+  transform: none;
+}
+
+.guessBoard {
+  position: relative;
+  z-index: 1;
+  margin-top: 22px;
+  overflow: hidden;
+  background: rgba(11, 14, 13, 0.72);
+  border: 1px solid rgba(247, 216, 141, 0.18);
+  border-radius: 8px;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.3);
+}
+
+.guessHeader,
+.guessRow {
+  display: grid;
+  grid-template-columns: 64px minmax(160px, 1.4fr) minmax(120px, 0.7fr) minmax(120px, 0.7fr);
+  align-items: center;
+}
+
+.guessHeader {
+  min-height: 44px;
+  color: #e4c67d;
+  font-size: 0.78rem;
+  font-weight: 900;
+  text-align: left;
+  text-transform: uppercase;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.guessHeader span,
+.guessRow span {
+  padding: 0 16px;
+}
+
+.guessRow {
+  min-height: 58px;
+  color: #d9cdbd;
+  text-align: left;
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.guessRow.filled {
+  color: #fff7eb;
+  background: rgba(255, 255, 255, 0.035);
+}
+
+.guessNumber {
+  color: #e1b45d;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.2rem;
+  font-weight: 800;
+}
+
+.guessCell {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.guessCell svg {
+  flex: 0 0 auto;
+  color: #e1b45d;
+  font-size: 1.1rem;
+}
+
+.correct,
+.guessCell .correct {
+  color: #87d69b;
+}
+
+@media only screen and (max-width: 920px) {
+  .full {
+    padding: 22px;
   }
 
-.test {
-    width: 100px;
-    height: 100px;
-    background-color: red;
-    animation-name: example;
-    animation-duration: 4s;
-    position: absolute;
-} */
+  .heroPanel,
+  .gameShell {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
 
-/* @media only screen and (max-width: 450px) {
+  .modeCluster {
+    justify-content: flex-start;
+  }
 
-    .guessDiv{
-        position: absolute;
-        top: 50vh;
-        left: 1%;
-    }
+  .scoreRail {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
 
-    .chapterDiv{
-        float: left;
-        position: absolute;
-        top: 50vh;
-        left: 30%;
-        font-size: 75%;
-    }
+  .scoreRail.dailyOnly {
+    grid-template-columns: 1fr;
+  }
 
-    .bookDiv{
-        position: fixed;
-        top: 50vh;
-        left: 8%;
-        font-size: 75%;
-    }
+  .guessControls {
+    grid-template-columns: 1fr;
+  }
 
-    .verseDiv{
-        position: fixed;
-        top: 50vh;
-        left: 22%;
-        height: 125%;
-        font-size: 75%;
-    }
+  .submit {
+    width: 100%;
+  }
+}
 
-} */
+@media only screen and (max-width: 640px) {
+  .full {
+    padding: 16px;
+  }
 
-@media only screen and (max-width: 850px) {
-    .chapterDropdown{
-        display: inline-block;
-        color: black;
-        font-size: 75%;
-        width: 20vw;
-        margin-left: 10%;
-        z-index: 11;
-        font-size: 50%;
-    }
+  .brandLockup {
+    align-items: flex-start;
+  }
 
-    .booksDropdown{
-        display: inline-block;
-        color: black;
-        font-size: 50%;
-        width: 30vw;
-        margin-left: -8%;
-    }
+  .sealMark {
+    width: 52px;
+    height: 52px;
+    font-size: 2rem;
+  }
 
-    .submit{
-        margin-top: -2%;
-        height: 3%;
-        z-index: 10;
-        position: absolute;
-        left: 40%;
-    }
+  .modeCluster,
+  .dailyVerse,
+  .newTestament {
+    width: 100%;
+  }
 
-    .fullLine{
-        width: 2000%;
-        background-color: red;
-        margin-top: 95%;
-    }
+  .dailyVerse,
+  .newTestament {
+    justify-content: space-between;
+  }
 
-    .fullLineTest{
-        width: 20%;
-        background-color: red;
-        margin-top: 59%;
-    }
+  .iconButton {
+    width: 100%;
+  }
 
-    .sizedBreak{
-        height: 1vh;
-    }
+  .scoreRail {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
 
-    .chapterDiv{
-        position: absolute;
-        top: 25vh;
-        left: 50%;
-        margin-top: 2%;
-        height: 40px;
-        font-family:serif;
-        font-size: 2.5vh;
-    }
+  .scoreRail.dailyOnly {
+    grid-template-columns: 1fr;
+  }
 
-    .allDropDowns{
-        display: flex;
-        margin-top: 5%;
-        height: 200%;
-    }
+  .scoreCard {
+    padding: 14px 10px;
+  }
 
-    /* .bookDiv{
-        position: absolute;
-        top: 25vh;
-        left: 8%;
-        margin-top: 2%;
-        height: 40px;
-    } */
+  .scoreCard span {
+    font-size: 0.68rem;
+  }
 
-    .book{
-        height: 3.5vh;
-    }
+  .scoreCard strong {
+    font-size: 1.7rem;
+  }
 
-    .standardHeight{
-        height: 4vh;
-    }
+  .verseCard {
+    min-height: 220px;
+    padding: 34px 22px;
+  }
 
+  .verseOrnament {
+    inset: 12px;
+  }
 
-    .verseDiv{
-        position: absolute;
-        top: 25vh;
-        left: 75%;
-        margin-top: 2%;
-        height: 40px;
-        font-family:serif;
-        font-size: 2.5vh;
-    }
+  .guessBoard {
+    overflow-x: auto;
+  }
 
-    .guessDiv{
-        position: absolute;
-        top: 25vh;
-        left: 1%;
-        margin-top: 2%;
-        height: 40px;
-        font-family:serif;
-        font-size: 2.5vh;
+  .guessHeader,
+  .guessRow {
+    grid-template-columns: 46px 180px 112px 112px;
+    min-width: 450px;
+  }
 
-    }
-
-    .guessDiv1{
-        position: absolute;
-        top: 25vh;
-        left: 8%;
-        margin-top: 2%;
-        height: 40px;
-        font-family:serif;
-        font-size: 2.5vh;
-    }
-
-    .newTestament{
-        font-size: 50%;
-        z-index: 10;
-        top: 0vh;
-        left: 18vh;
-        position: absolute;
-        left: 20%;
-    }
-    
-    .refresh{
-        top: 0vh;
-        left: 75%;
-        z-index: 10;
-        position: absolute;
-    }
-
-    .nonGuesses{
-        margin-top: 10%;
-    }
-
-    .dropDownSameLine{
-        display: inline-block;
-        margin-left: 5%;
-        margin-top: 5%;
-        z-index: 10;
-        font-family:serif;
-    }
-    .dropDownSameLine1{
-        display: inline-block;
-        margin-left: 5%;
-        margin-top: 5%;
-        z-index: 10;
-        font-family:serif;
-    }
-    .dropDownSameLine2{
-        display: inline-block;
-        margin-left: 5%;
-        margin-top: 5%;
-        z-index: 10;
-        font-family:serif;
-    }
-    .curStreak{
-        position: absolute;
-        margin-top: 5%;
-        margin-left: 5%;
-        font-family:serif;
-    }
-    
-    .right{
-        position: absolute;
-        margin-left: 45%;
-        margin-top: 5%;
-        font-family:serif;
-        background-color: green;
-    }
-
-    .hidden{
-        display: none;
-    }
-    
-    .wrong{
-        position: absolute;
-        margin-left: 75%;
-        margin-top: 5%;
-        font-family:serif;
-        background-color: rgb(193, 0, 0);
-    }
+  .guessHeader span,
+  .guessRow span {
+    padding: 0 10px;
+  }
 }

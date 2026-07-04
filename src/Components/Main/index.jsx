@@ -1,32 +1,12 @@
 import React, {Component} from "react";
-import Dropdown from 'react-dropdown';
-import 'react-dropdown/style.css';
 import NativeSelect from 'react-select';
-import {Grid, Paper} from "@material-ui/core";
-import Divider from '@mui/material/Divider';
-import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
-import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
-import Stack from '@mui/material/Stack';
-import blankScroll from '../../BlankScroll.png'
 import './main.css';
-import mytext from '../KJVTranslation';
 import worldenglish from '../WorldEnglishTranslation';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import RemoveIcon from '@mui/icons-material/Remove';
 import AddIcon from '@mui/icons-material/Add';
-import Refresh from "@mui/icons-material/Refresh";
 import CheckIcon from '@mui/icons-material/Check';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
-import { FastRewind } from "@mui/icons-material";
 import Switch from "react-switch";
-const aquaticCreatures = [
-    { label: 'Shark', value: 'Shark' },
-    { label: 'Dolphin', value: 'Dolphin' },
-    { label: 'Whale', value: 'Whale' },
-    { label: 'Octopus', value: 'Octopus' },
-    { label: 'Crab', value: 'Crab' },
-    { label: 'Lobster', value: 'Lobster' },
-  ];
   const books = [
     'Genesis',         'Exodus',          'Leviticus',     'Numbers',
     'Deuteronomy',     'Joshua',          'Judges',        'Ruth',
@@ -132,60 +112,124 @@ class Main extends Component {
             actualBook: "",
             showRealVerse: false,
             newTestMode: false,
-            currentStreak: 0,
+            dailyStreak: 0,
+            endlessStreak: 0,
             wrong: 0,
             right: 0,
             correctAnswer: false,
-            dailyVerse: false
+            dailyVerse: true
         };
       }
 
       componentDidMount(){
-        const words = this.state.fullBible.split(/([0-9]+[0-9]+[0-9]+:[0-9]+[0-9]+[0-9]+)/);
-        var chaptersArray = [];
-        for(var j = 3; j < words.length; j++){
-            if(words[j].includes(":001")){
-                chaptersArray.push(parseInt(words[j-2].split(":")[1]))
+        const savedDailyStreak = parseInt(localStorage.getItem("versleDailyStreak") || "0");
+        const savedEndlessStreak = parseInt(localStorage.getItem("versleEndlessStreak") || "0");
+        this.setState({
+            dailyStreak: savedDailyStreak,
+            endlessStreak: savedEndlessStreak
+        });
+        this.loadDailyVerse();
+      }
+
+    getDateKey(date = new Date()){
+        const month = String(date.getMonth() + 1).padStart(2, "0");
+        const day = String(date.getDate()).padStart(2, "0");
+        return `${date.getFullYear()}-${month}-${day}`;
+    }
+
+    hashString(value){
+        var hash = 0;
+        for(var i = 0; i < value.length; i++){
+            hash = ((hash << 5) - hash) + value.charCodeAt(i);
+            hash = hash & hash;
+        }
+        return Math.abs(hash);
+    }
+
+    getBibleWords(){
+        return this.state.fullBible.split(/([0-9]+[0-9]+[0-9]+:[0-9]+[0-9]+[0-9]+)/);
+    }
+
+    getVerseIndexes(words){
+        var indexes = [];
+        for(var i = 2; i < words.length; i += 2){
+            if(words[i - 1] && words[i - 1].includes(":")){
+                indexes.push(i);
             }
         }
-        var verseArray = [];
-        var temp = 0;
-        for(var h = 3; h < words.length; h++){
-            temp++;
-            if(words[h].includes(":001")){
-                verseArray.push(temp);
-                temp = 0;
-            }
-        }
-        console.log("Final Verse Array "+ verseArray);
-        console.log("verses array "+ chaptersArray)
-        console.log("Length of bible " + words.length);
-        var ind = Math.floor(Math.random() * words.length);
-        if(ind % 2 !== 0){
-            ind++;
-        }
-        var bookOfBibleInd;
-        for(var i = ind; i>-1; i--){
+        return indexes;
+    }
+
+    getBookForVerse(words, verseIndex){
+        for(var i = verseIndex; i > -1; i--){
             if(words[i] ===  "001:001"){
-                bookOfBibleInd = i-1;
-                break;
+                return words[i - 1];
             }
         }
+        return "";
+    }
+
+    setVerse(words, ind){
         let show = words[ind];
-        var book = words[bookOfBibleInd];
-        var finalBook  = book.substring(book.indexOf("Book"))
-        console.log("Book of bible " + book.substring(book.indexOf("Book")));
-        console.log("CHAPTER VERSE " + words[ind-1]);
-        console.log("ACTUAL VERSE "+ show);
+        var book = this.getBookForVerse(words, ind);
         this.setState({
             book: book.substring(book.indexOf("Book")),
             chapter: parseInt(words[ind-1].split(":")[0]),
             verseNum: parseInt(words[ind-1].split(":")[1]),
             verseText: show,
             verseIndex: ind,
+            selectedBook: "",
+            varChapters: [],
+            varVerses: [],
+            selectedChapter: 0,
+            selectedVerse: 0,
+            bookGuesses: [],
+            chapterGuesses: [],
+            verseGuesses: [],
+            bookGuessesVal: [],
+            chapterGuessesVal: [],
+            verseGuessesVal: [],
+            actualBook: "",
+            showRealVerse: false,
+            correctAnswer: false
         })
-        
-      }
+    }
+
+    loadDailyVerse(){
+        const words = this.getBibleWords();
+        const verseIndexes = this.getVerseIndexes(words);
+        const todayKey = this.getDateKey();
+        const ind = verseIndexes[this.hashString(todayKey) % verseIndexes.length];
+        this.setVerse(words, ind);
+    }
+
+    updateDailyStreak(){
+        const todayKey = this.getDateKey();
+        const lastSolvedDate = localStorage.getItem("versleLastSolvedDate");
+        if(lastSolvedDate === todayKey){
+            return;
+        }
+
+        const yesterday = new Date();
+        yesterday.setDate(yesterday.getDate() - 1);
+        const yesterdayKey = this.getDateKey(yesterday);
+        const savedStreak = parseInt(localStorage.getItem("versleDailyStreak") || "0");
+        const nextStreak = lastSolvedDate === yesterdayKey ? savedStreak + 1 : 1;
+
+        localStorage.setItem("versleDailyStreak", nextStreak.toString());
+        localStorage.setItem("versleLastSolvedDate", todayKey);
+        this.setState({
+            dailyStreak: nextStreak
+        })
+    }
+
+    pickRandomVerse(newTest){
+        const words = this.getBibleWords();
+        const minIndex = newTest ? 46291 : 0;
+        const verseIndexes = this.getVerseIndexes(words).filter(index => index >= minIndex);
+        const ind = verseIndexes[Math.floor(Math.random() * verseIndexes.length)];
+        this.setVerse(words, ind);
+    }
 
     calcChapters(bookInd){
         var tempChaps = [];
@@ -204,7 +248,10 @@ class Main extends Component {
         this.setState({
             selectedBook: book.value,
             varChapters: tempChaps,
-            bookIndex: bookInd
+            bookIndex: bookInd,
+            varVerses: [],
+            selectedChapter: 0,
+            selectedVerse: 0
         })
     }
 
@@ -240,24 +287,34 @@ class Main extends Component {
     }
 
     submit(){
-        var book;
-        var chapter;
-        var verse;
         var actualBook;
         if(this.state.book.includes(this.state.selectedBook) && this.state.selectedChapter=== this.state.chapter && this.state.selectedVerse === this.state.verseNum){
             alert("WELL DONE YOU GOT IT");
-            this.setState({
-                currentStreak: this.state.currentStreak+1,
-                right: this.state.right + 1,
-                correctAnswer: true
-            })
+            if(this.state.dailyVerse){
+                this.updateDailyStreak();
+                this.setState({
+                    correctAnswer: true
+                })
+            }else{
+                const nextEndlessStreak = this.state.endlessStreak + 1;
+                localStorage.setItem("versleEndlessStreak", nextEndlessStreak.toString());
+                this.setState({
+                    endlessStreak: nextEndlessStreak,
+                    right: this.state.right + 1,
+                    correctAnswer: true
+                })
+            }
         }
         if(this.state.bookGuessesVal.length === 6 && (!this.state.book.includes(this.state.selectedBook) || this.state.selectedChapter !== this.state.chapter || this.state.selectedVerse !== this.state.verseNum)){
-            this.setState({
-                showRealVerse: true,
-                currentStreak: 0,
-                wrong: this.state.wrong + 1
-            })
+            const missState = {
+                showRealVerse: true
+            };
+            if(!this.state.dailyVerse){
+                localStorage.setItem("versleEndlessStreak", "0");
+                missState.endlessStreak = 0;
+                missState.wrong = this.state.wrong + 1;
+            }
+            this.setState(missState)
             alert("SORRY YOU DIDN'T GET IT");
         }
         var book1 = this.state.book.split(" ");
@@ -322,6 +379,24 @@ class Main extends Component {
     }
 
     refresh(newTest){
+        this.pickRandomVerse(newTest);
+    }
+
+    dailyVerse(){
+        const nextDaily = !this.state.dailyVerse;
+        this.setState({
+            dailyVerse: nextDaily,
+            newTestMode: false
+        }, () => {
+            if(nextDaily){
+                this.loadDailyVerse();
+            }else{
+                this.refresh(false);
+            }
+        })
+    }
+
+    oldRefresh(newTest){
         const words = this.state.fullBible.split(/([0-9]+[0-9]+[0-9]+:[0-9]+[0-9]+[0-9]+)/);
         var chaptersArray = [];
         for(var j = 3; j < words.length; j++){
@@ -348,7 +423,6 @@ class Main extends Component {
         }
         let show = words[ind];
         var book = words[bookOfBibleInd];
-        var finalBook  = book.substring(book.indexOf("Book"))
         console.log("Book of bible " + book.substring(book.indexOf("Book")));
         console.log("CHAPTER VERSE " + words[ind-1]);
         console.log("ACTUAL VERSE "+ show);
@@ -369,12 +443,6 @@ class Main extends Component {
         })
     }
 
-    dailyVerse(){
-        this.setState({
-            dailyVerse: !this.state.dailyVerse
-        })
-    }
-
     // GridItem({ classes }) {
     //     return (
     //       // From 0 to 600px wide (smart-phones), I take up 12 columns, or the whole device width!
@@ -385,120 +453,170 @@ class Main extends Component {
     //   }
 
     render(){
-        var fixedBooks = books.map(opt => ({ label: opt, value: opt }));
+        let fixedBooks = books.map(opt => ({ label: opt, value: opt }));
         if(this.state.newTestMode){
-            var fixedBooks = newTestamentBooks.map(opt => ({ label: opt, value: opt }));
+            fixedBooks = newTestamentBooks.map(opt => ({ label: opt, value: opt }));
         }
         var fixedChapters = this.state.varChapters.map(opt => ({ label: opt, value: opt }));
         var fixedVerses = this.state.varVerses.map(opt => ({ label: opt, value: opt }));
-        const { varChapters } = this.state;
-
-        let chaptersList = varChapters.map((item,i) => <li key={i}>Test</li>)
+        const selectedBookOption = fixedBooks.find(opt => opt.value === this.state.selectedBook) || null;
+        const selectedChapterOption = fixedChapters.find(opt => parseInt(opt.value) === this.state.selectedChapter) || null;
+        const selectedVerseOption = fixedVerses.find(opt => parseInt(opt.value) === this.state.selectedVerse) || null;
         // var bookOutput = varChapters.bookGuesses.map(item => <div> {item} </div>)
         return(
-            <div className="full">
-                <div className="nonGuesses"
-                style={{
-                    backgroundImage: 'url('+blankScroll+')',
-                    backgroundSize: "100% 60%",
-                    backgroundRepeat: "no-repeat"
-                  }}>
-                {this.state.showRealVerse &&
-                <div className="realVerse">
-                    Actual Verse: {this.state.book} &nbsp;
-                    {this.state.chapter}:
-                    {this.state.verseNum}
-                </div>
-                }
-                <br></br>
-                    <div className="verseText">
-                        {this.state.verseText}
+            <main className="full">
+                <section className="heroPanel">
+                    <div className="brandLockup">
+                        <span className="sealMark">V</span>
+                        <div>
+                            <p className="eyebrow">Scripture discovery game</p>
+                            <h1>Versle</h1>
+                        </div>
                     </div>
-                <br></br>
-                <br></br>
-                <br></br>
-                <div className="allDropDowns">
-                <div className="dropDownSameLine">BOOK:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <NativeSelect className="booksDropdown"
-                    options={fixedBooks}
-                    onChange={opt => this.selectedBook(opt)}
-                    autoWidth="true"
-                    isSearchable={false}
-                    />
+                    <div className="modeCluster">
+                        <label className="dailyVerse">
+                            <span>Daily</span>
+                            <Switch
+                                onChange={opt => this.dailyVerse()}
+                                checked={this.state.dailyVerse}
+                                onColor="#b8872f"
+                                offColor="#5b4a38"
+                                checkedIcon={false}
+                                uncheckedIcon={false}
+                                height={24}
+                                width={48}
+                            />
+                        </label>
+                        {!this.state.dailyVerse &&
+                            <label className="newTestament">
+                                <span>New Testament</span>
+                                <input
+                                    id ="checkbox_id"
+                                    type="checkbox"
+                                    checked={this.state.newTestMode}
+                                    onChange={opt=>this.handleCheck(opt)}
+                                />
+                            </label>
+                        }
+                        {!this.state.dailyVerse &&
+                            <button className="iconButton" onClick={opt => this.refresh(this.state.newTestMode)} aria-label="New verse">
+                                <RefreshIcon></RefreshIcon>
+                            </button>
+                        }
                     </div>
-                    <br></br>
-                <div className="dropDownSameLine1">CHAPTER:
-                <NativeSelect className="chapterDropdown"
-                    options={fixedChapters}
-                    onChange={opt => this.selectedChapter(opt)}
-                    isSearchable={false}
-                    />
-                {/* <Dropdown className="booksDropdown"
-                    options={this.state.varChapters}
-                    onChange={opt => this.selectedChapter(opt)}
-                    /> */}
+                </section>
+
+                <section className="gameShell">
+                    <aside className={`scoreRail ${this.state.dailyVerse ? "dailyOnly" : ""}`} aria-label="Game score">
+                        <div className="scoreCard">
+                            <span>{this.state.dailyVerse ? "Daily Streak" : "Streak"}</span>
+                            <strong>{this.state.dailyVerse ? this.state.dailyStreak : this.state.endlessStreak}</strong>
+                        </div>
+                        {!this.state.dailyVerse &&
+                            <div className="scoreCard success">
+                                <span>Correct</span>
+                                <strong>{this.state.right}</strong>
+                            </div>
+                        }
+                        {!this.state.dailyVerse &&
+                            <div className="scoreCard miss">
+                                <span>Missed</span>
+                                <strong>{this.state.wrong}</strong>
+                            </div>
+                        }
+                    </aside>
+
+                    <section className="playSurface">
+                        <div className="verseCard">
+                            <div className="verseOrnament"></div>
+                            {this.state.showRealVerse &&
+                                <div className="realVerse">
+                                    Answer: {this.state.book} {this.state.chapter}:{this.state.verseNum}
+                                </div>
+                            }
+                            <p className="verseText">{this.state.verseText}</p>
+                        </div>
+
+                        <div className="guessControls" aria-label="Make a guess">
+                            <label className="selectGroup">
+                                <span>Book</span>
+                                <NativeSelect className="booksDropdown"
+                                    classNamePrefix="verseSelect"
+                                    placeholder="Choose book"
+                                    options={fixedBooks}
+                                    value={selectedBookOption}
+                                    onChange={opt => this.selectedBook(opt)}
+                                    autoWidth="true"
+                                    isSearchable={false}
+                                />
+                            </label>
+                            <label className="selectGroup">
+                                <span>Chapter</span>
+                                <NativeSelect className="chapterDropdown"
+                                    classNamePrefix="verseSelect"
+                                    placeholder="Chapter"
+                                    options={fixedChapters}
+                                    value={selectedChapterOption}
+                                    onChange={opt => this.selectedChapter(opt)}
+                                    isSearchable={false}
+                                />
+                            </label>
+                            <label className="selectGroup">
+                                <span>Verse</span>
+                                <NativeSelect className="chapterDropdown"
+                                    classNamePrefix="verseSelect"
+                                    placeholder="Verse"
+                                    options={fixedVerses}
+                                    value={selectedVerseOption}
+                                    onChange={opt => this.selectedVerses(opt)}
+                                    isSearchable={false}
+                                />
+                            </label>
+                            <button disabled={this.state.correctAnswer} className="submit" onClick={opt => this.submit()}>
+                                Submit Guess
+                            </button>
+                        </div>
+                    </section>
+                </section>
+
+                <section className="guessBoard" aria-label="Guess history">
+                    <div className="guessHeader">
+                        <span>#</span>
+                        <span>Book</span>
+                        <span>Chapter</span>
+                        <span>Verse</span>
                     </div>
-                    <br></br>
-                    <div className="dropDownSameLine2">VERSE:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <NativeSelect className="chapterDropdown"
-                    options={fixedVerses}
-                    onChange={opt => this.selectedVerses(opt)}
-                    isSearchable={false}
-                />
-                {/* <Dropdown className="booksDropdown"
-                    options={this.state.varVerses}
-                    onChange={opt => this.selectedVerses(opt)}
-                    /> */}
-                    </div>
-                    <button disabled={this.state.correctAnswer} className="submit" onClick={opt => this.submit()}>Submit</button>
-                    <label className="dailyVerse">
-                        Daily Verse
-                        <Switch onChange={opt => this.dailyVerse()}
-                        checked={this.state.dailyVerse}/>
-                    </label>
-                    <div className="newTestament">
-                        New testament <br></br>Mode
-                        <input
-                            id ="checkbox_id"
-                            type="checkbox"
-                            checked={this.state.newTestMode}
-                            onClick={opt=>this.handleCheck(opt)}
-                        />
-                        
-                    </div>
-                    <RefreshIcon className="refresh" onClick={opt => this.refresh(this.state.newTestMode)}></RefreshIcon>
-                </div>
-                <div className="curStreak">
-                    Current Streak: {this.state.currentStreak}
-                </div>
-                <div className ="right">
-                    Correct: {this.state.right}
-                </div>
-                <div className = "wrong">
-                    Wrong: {this.state.wrong}
-                </div>
-                </div>
-                <br></br>
-                <div className="guess">
-                {/* <div className="guessDiv">
-                    <Stack className="red"><Paper className="standardHeight">1:</Paper><hr className="fullLine"></hr><Paper className="standardHeight">2:</Paper><hr className="fullLine"></hr><Paper>3:</Paper><hr className="fullLine"></hr><Paper>4:</Paper><hr className="fullLine"></hr><Paper>5:</Paper><hr className="fullLine"></hr><Paper>6:</Paper><hr className="fullLine"></hr><Paper>7:</Paper></Stack>
-                </div> */}
-                <div className="guessDiv">
-                    {this.state.guessesVal.map(item => <Stack><Paper className="standardHeight">&nbsp;{item}:</Paper><br></br></Stack>)}
-                </div>
-                <div className="guessDiv1">
-                    {this.state.bookGuessesVal.map(item => <Stack><Paper className="standardHeight">{item}{books.indexOf(item)-books.indexOf(this.state.actualBook) > 0 && <RemoveIcon></RemoveIcon>} {books.indexOf(item)-books.indexOf(this.state.actualBook) < 0 && <AddIcon className="smaller"></AddIcon>} {books.indexOf(item)-books.indexOf(this.state.actualBook) === 0 &&<CheckIcon className="correct"></CheckIcon>}</Paper><br></br></Stack>)}
-                </div>
-                <div className="chapterDiv">
-                
-                    {this.state.chapterGuessesVal.map(item => <Stack><Paper className="standardHeight">Ch: {item}{item-parseInt(this.state.chapter) > 0 && <RemoveIcon></RemoveIcon>} {item-parseInt(this.state.chapter) < 0 && <AddIcon></AddIcon>} {item-parseInt(this.state.chapter) === 0 &&<CheckIcon className="correct"></CheckIcon>}</Paper><br></br></Stack>)}
-                </div>
-                <div className="verseDiv">
-                    {this.state.verseGuessesVal.map(item => <Stack><Paper className="standardHeight">vv: {item} {item-parseInt(this.state.verseNum) > 0 && <RemoveIcon></RemoveIcon>} {item-parseInt(this.state.verseNum) < 0 && <AddIcon></AddIcon>} {item-parseInt(this.state.verseNum) === 0 &&<CheckIcon className="correct"></CheckIcon>}</Paper> <br></br></Stack>)}
-                </div>
-                </div>
-                {/* <Dropdown options={books} value={"PLEASE SELECT A BOOK"} placeholder="Select an option" /> */}
-            </div>
+                    {this.state.guessesVal.map((item, index) => {
+                        const bookGuess = this.state.bookGuessesVal[index];
+                        const chapterGuess = this.state.chapterGuessesVal[index];
+                        const verseGuess = this.state.verseGuessesVal[index];
+                        const bookDelta = books.indexOf(bookGuess)-books.indexOf(this.state.actualBook);
+                        return (
+                            <div className={`guessRow ${bookGuess ? 'filled' : ''}`} key={item}>
+                                <span className="guessNumber">{item}</span>
+                                <span className="guessCell">
+                                    {bookGuess || "Awaiting guess"}
+                                    {bookGuess && bookDelta > 0 && <RemoveIcon></RemoveIcon>}
+                                    {bookGuess && bookDelta < 0 && <AddIcon></AddIcon>}
+                                    {bookGuess && bookDelta === 0 && <CheckIcon className="correct"></CheckIcon>}
+                                </span>
+                                <span className="guessCell">
+                                    {chapterGuess ? `Ch. ${chapterGuess}` : "-"}
+                                    {chapterGuess && chapterGuess-parseInt(this.state.chapter) > 0 && <RemoveIcon></RemoveIcon>}
+                                    {chapterGuess && chapterGuess-parseInt(this.state.chapter) < 0 && <AddIcon></AddIcon>}
+                                    {chapterGuess && chapterGuess-parseInt(this.state.chapter) === 0 && <CheckIcon className="correct"></CheckIcon>}
+                                </span>
+                                <span className="guessCell">
+                                    {verseGuess ? `V. ${verseGuess}` : "-"}
+                                    {verseGuess && verseGuess-parseInt(this.state.verseNum) > 0 && <RemoveIcon></RemoveIcon>}
+                                    {verseGuess && verseGuess-parseInt(this.state.verseNum) < 0 && <AddIcon></AddIcon>}
+                                    {verseGuess && verseGuess-parseInt(this.state.verseNum) === 0 && <CheckIcon className="correct"></CheckIcon>}
+                                </span>
+                            </div>
+                        )
+                    })}
+                </section>
+            </main>
         )
     }
 }
