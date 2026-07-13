@@ -550,12 +550,8 @@ class Main extends Component {
                 {this.state.showWinMessage &&
                     <section className="victoryOverlay" aria-live="polite">
                         <div className="victoryPanel">
-                            <p className="victoryEyebrow">Well done, faithful scribe</p>
                             <h2>Verse Found</h2>
                             <p className="victoryReference">{this.state.winReference}</p>
-                            <p className="victoryCopy">
-                                You placed the scroll back in its chapter.
-                            </p>
                             <div className="victoryActions">
                                 <a
                                     className="passageLink"
