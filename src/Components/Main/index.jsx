@@ -118,6 +118,9 @@ class Main extends Component {
             right: 0,
             correctAnswer: false,
             dailyDateKey: "",
+            showWinMessage: false,
+            winReference: "",
+            winPassageUrl: "",
             dailyVerse: true
         };
       }
@@ -210,7 +213,10 @@ class Main extends Component {
             verseGuessesVal: [],
             actualBook: "",
             showRealVerse: false,
-            correctAnswer: false
+            correctAnswer: false,
+            showWinMessage: false,
+            winReference: "",
+            winPassageUrl: ""
         })
     }
 
@@ -313,14 +319,37 @@ class Main extends Component {
         })
     }
 
+    getActualBookName(){
+        const normalizedBook = this.state.book.replace(/(\r\n|\n|\r)/gm, " ");
+        const sortedBooks = [...books].sort((a, b) => b.length - a.length);
+        return sortedBooks.find(book => normalizedBook.includes(book)) || "";
+    }
+
+    getPassageUrl(book, chapter){
+        return `https://www.biblegateway.com/passage/?search=${encodeURIComponent(`${book} ${chapter}`)}&version=WEB`;
+    }
+
+    closeWinMessage(){
+        this.setState({
+            showWinMessage: false
+        })
+    }
+
     submit(){
-        var actualBook;
-        if(this.state.book.includes(this.state.selectedBook) && this.state.selectedChapter=== this.state.chapter && this.state.selectedVerse === this.state.verseNum){
-            alert("WELL DONE YOU GOT IT");
+        var actualBook = this.getActualBookName();
+        var bookInd = books.indexOf(actualBook);
+        var selectedBookInd = books.indexOf(this.state.selectedBook);
+        const isCorrect = this.state.book.includes(this.state.selectedBook) && this.state.selectedChapter=== this.state.chapter && this.state.selectedVerse === this.state.verseNum;
+
+        if(isCorrect){
+            const winReference = `${actualBook} ${this.state.chapter}:${this.state.verseNum}`;
             if(this.state.dailyVerse){
                 this.updateDailyStreak();
                 this.setState({
-                    correctAnswer: true
+                    correctAnswer: true,
+                    showWinMessage: true,
+                    winReference: winReference,
+                    winPassageUrl: this.getPassageUrl(actualBook, this.state.chapter)
                 })
             }else{
                 const nextEndlessStreak = this.state.endlessStreak + 1;
@@ -328,11 +357,14 @@ class Main extends Component {
                 this.setState({
                     endlessStreak: nextEndlessStreak,
                     right: this.state.right + 1,
-                    correctAnswer: true
+                    correctAnswer: true,
+                    showWinMessage: true,
+                    winReference: winReference,
+                    winPassageUrl: this.getPassageUrl(actualBook, this.state.chapter)
                 })
             }
         }
-        if(this.state.bookGuessesVal.length === 6 && (!this.state.book.includes(this.state.selectedBook) || this.state.selectedChapter !== this.state.chapter || this.state.selectedVerse !== this.state.verseNum)){
+        if(this.state.bookGuessesVal.length === 6 && !isCorrect){
             const missState = {
                 showRealVerse: true
             };
@@ -344,24 +376,6 @@ class Main extends Component {
             this.setState(missState)
             alert("SORRY YOU DIDN'T GET IT");
         }
-        var book1 = this.state.book.split(" ");
-        var book2;
-        var book3;
-        if(book1.length > 3){
-            book2 = book1[2].replace(/(\r\n|\n|\r)/gm, "");
-            book3 = book1[3].replace(/(\r\n|\n|\r)/gm, "");
-        }else{
-            book2 = book1[2].replace(/(\r\n|\n|\r)/gm, "");
-        }
-        var bookInd = -1;
-        if(book3){
-            bookInd = books.indexOf(book2 + " " +  book3);
-            actualBook = book2 + " " +  book3
-        }else{
-            bookInd = books.indexOf(book2);
-            actualBook = book2;
-        }
-        var selectedBookInd = books.indexOf(this.state.selectedBook);
         var bGuesses=[...this.state.bookGuesses]
         var cGuesses=[...this.state.chapterGuesses]
         var vGuesses=[...this.state.verseGuesses]
@@ -532,6 +546,32 @@ class Main extends Component {
                         }
                     </div>
                 </section>
+
+                {this.state.showWinMessage &&
+                    <section className="victoryOverlay" aria-live="polite">
+                        <div className="victoryPanel">
+                            <p className="victoryEyebrow">Well done, faithful scribe</p>
+                            <h2>Verse Found</h2>
+                            <p className="victoryReference">{this.state.winReference}</p>
+                            <p className="victoryCopy">
+                                You placed the scroll back in its chapter.
+                            </p>
+                            <div className="victoryActions">
+                                <a
+                                    className="passageLink"
+                                    href={this.state.winPassageUrl}
+                                    target="_blank"
+                                    rel="noreferrer"
+                                >
+                                    Read the full passage
+                                </a>
+                                <button className="victoryClose" onClick={opt => this.closeWinMessage()}>
+                                    Continue
+                                </button>
+                            </div>
+                        </div>
+                    </section>
+                }
 
                 <section className="gameShell">
                     <aside className={`scoreRail ${this.state.dailyVerse ? "dailyOnly" : ""}`} aria-label="Game score">
