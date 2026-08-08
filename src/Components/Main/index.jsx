@@ -159,13 +159,24 @@ class Main extends Component {
         return this.getDateKey(previousEasternNoon);
     }
 
-    hashString(value){
-        var hash = 0;
+    getDailySeed(value){
+        var hash = 2166136261;
         for(var i = 0; i < value.length; i++){
-            hash = ((hash << 5) - hash) + value.charCodeAt(i);
-            hash = hash & hash;
+            hash ^= value.charCodeAt(i);
+            hash = Math.imul(hash, 16777619);
         }
-        return Math.abs(hash);
+        return hash >>> 0;
+    }
+
+    getSeededRandom(seed){
+        var value = seed + 0x6D2B79F5;
+        value = Math.imul(value ^ (value >>> 15), value | 1);
+        value ^= value + Math.imul(value ^ (value >>> 7), value | 61);
+        return ((value ^ (value >>> 14)) >>> 0) / 4294967296;
+    }
+
+    getDailyVersePosition(dateKey, verseCount){
+        return Math.floor(this.getSeededRandom(this.getDailySeed(dateKey)) * verseCount);
     }
 
     getBibleWords(){
@@ -224,7 +235,7 @@ class Main extends Component {
         const words = this.getBibleWords();
         const verseIndexes = this.getVerseIndexes(words);
         const todayKey = this.getDateKey();
-        const ind = verseIndexes[this.hashString(todayKey) % verseIndexes.length];
+        const ind = verseIndexes[this.getDailyVersePosition(todayKey, verseIndexes.length)];
         this.setVerse(words, ind);
         this.setState({
             dailyDateKey: todayKey
